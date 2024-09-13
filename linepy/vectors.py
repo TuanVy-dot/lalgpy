@@ -5,6 +5,8 @@ Mathematical object `Vector`
 
 import numpy as np
 from .exceptions import *
+from .utilities import *
+from linepy import utilities
 
 class Vector:
     """
@@ -37,7 +39,7 @@ Mathematical vectors
     
     Methods
     -------
-    set_components(self, *args: float)
+    set_components(self, *args: int | float)
         Set a new set of components for that vector
     round(self, decimal_places: int) -> None
         Round every components of the vector to a specific decimal_places, directly change the original vector
@@ -62,7 +64,7 @@ Mathematical vectors
 
         Parameters
         ----------
-        *args: float 
+        *args: int | float 
             The vectors components
         
         Raises
@@ -88,7 +90,7 @@ Mathematical vectors
 
         Parameters 
         ----------
-        *args: float
+        *args: int | float
         """
         self.__components = Vector(*args).components
 
@@ -130,8 +132,8 @@ Mathematical vectors
         if not isinstance(other, Vector):
             return NotImplemented
         if self.dimensions != other.dimensions:
-            raise DimensionsError("Operand + required two vectors with the same dimensions")
-        return Vector(*[c1 + c2 for c1, c2 in zip(self.components, other.components)])
+            raise DimensionsError("Operator `+` required two vectors with the same dimensions")
+        return Vector(*utilities.array_add(self.components, other.components))
 
     def __sub__(self, other):
         """
@@ -156,8 +158,8 @@ Mathematical vectors
         if not isinstance(other, Vector):
             return NotImplemented
         if self.dimensions != other.dimensions:
-            raise DimensionsError("Operand + required two vectors with the same dimensions")
-        return Vector(*[c1 - c2 for c1, c2 in zip(self.components, other.components)])
+            raise DimensionsError("Operator `-` required two vectors with the same dimensions")
+        return Vector(*utilities.array_sub(self.components, other.components))
     
     def __mul__(self, other: int | float):
         """
@@ -170,7 +172,7 @@ Mathematical vectors
         ----------
         self: Vector
             The first vector
-        other: float
+        other: int | float
             The scalar
 
         Raises
@@ -179,8 +181,8 @@ Mathematical vectors
             If the other is not a scalar
         """
         if not isinstance(other, (int, float)):
-            raise TypeError("Vector multiplication using \"*\" is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
-        return Vector(*[c*other for c in self.components])
+            raise TypeError("Vector multiplication using `*` is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
+        return Vector(*utilities.array_scalar_mul(self.components, other))
 
     def __truediv__(self, other: int | float):
         """
@@ -193,7 +195,7 @@ Mathematical vectors
         ----------
         self: Vector
             The first vector
-        other: float
+        other: int | float
             The scalar
 
         Raises
@@ -202,8 +204,8 @@ Mathematical vectors
             If the other is not a scalar
         """
         if not isinstance(other, (int, float)):
-            raise TypeError("Vector true division using \"*\" is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
-        return Vector(*[c/other for c in self.components])
+            raise TypeError("Vector true division using `/` is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
+        return Vector(*utilities.array_scalar_truediv(self.components, other))
     
     def __floordiv__(self, other: int | float):
         """
@@ -216,7 +218,7 @@ Mathematical vectors
         ----------
         self: Vector
             The first vector
-        other: float
+        other: int | float
             The scalar
 
         Raises
@@ -226,8 +228,8 @@ Mathematical vectors
         """
         if not isinstance(other, (int, float)):
             
-            raise TypeError("Vector true division using \"*\" is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
-        return Vector(*[c//other for c in self.components])   
+            raise TypeError("Vector floor division using `//` is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
+        return Vector(*utilities.array_floor_div(self.components, other))   
 
     def __eq__(self, other) -> bool:
         """
@@ -361,7 +363,7 @@ Mathematical vectors
         if v1.dimensions != v2.dimensions:
             raise DimensionsError("Dot product required 2 Vectors with the same dimensions")
         return sum(
-            c1*c2 for c1, c2 in zip(v1.components, v2.components)
+            utilities.array_mul(v1.components, v2.components)
         )
 
     @staticmethod

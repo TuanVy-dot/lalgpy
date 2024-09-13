@@ -1,4 +1,5 @@
 import numpy as np 
+from .utilities import *
 from .exceptions import *
 from .vectors import *
 
@@ -29,4 +30,9 @@ class Matrix:
         return f"Matrix{tuple(self.__components)}"
 
     def __add__(self, other):
-        pass
+        if not isinstance(other, Matrix):
+            return NotImplemented
+        if self.dimensions != other.dimensions:
+            raise DimensionsError("Operand `+` required two matrices with the same dimensions")
+        return Matrix(*[utilities.array_add(c1, c2) 
+                        for c1, c2 in zip(self.components, other.components)])
