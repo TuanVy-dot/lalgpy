@@ -37,7 +37,7 @@ Mathematical vectors
     
     Methods
     -------
-    set_components(self, *args)
+    set_components(self, *args: float)
         Set a new set of components for that vector
     round(self, decimal_places: int) -> None
         Round every components of the vector to a specific decimal_places, directly change the original vector
@@ -56,13 +56,13 @@ Mathematical vectors
         Get the angle between the 2 vectors. In the range [0, pi] radians or [0, 180] degrees only, if the angle is larger, it will just take the smaller or you can say absolute value of the co-terminal angle. So you should know what you are doing. Return angle in radians if `rad` is True, otherwise it will be in degrees
     """
 
-    def __init__(self, *args: float) -> None:
+    def __init__(self, *args: int | float) -> None:
         """
         Initialize the vector 
 
         Parameters
         ----------
-        *args: int or float 
+        *args: float 
             The vectors components
         
         Raises
@@ -72,23 +72,23 @@ Mathematical vectors
         """
         for arg in args:
             if not isinstance(arg, (int, float)):
-                raise TypeError("Vector components must be of type int or float")
+                raise TypeError("Vector components must be of type float")
         self.__components = [*args]
 
     @property 
-    def components(self) -> list[float]:
+    def components(self) -> list[int | float]:
         """
         The vector components
         """
         return self.__components
 
-    def set_components(self, *args:float) -> None:
+    def set_components(self, *args: int | float) -> None:
         """
         Set a new set of components for the vector 
 
         Parameters 
         ----------
-        *args: int or float
+        *args: float
         """
         self.__components = Vector(*args).components
 
@@ -105,11 +105,7 @@ Mathematical vectors
 
         Return the string of the form `Vector(*components)`
         """
-        components = tuple([int(c) 
-                            if isinstance(c, float) and c.is_integer() 
-                            else c 
-                            for c in self.components])
-        return f"Vector{components}"
+        return f"Vector{tuple(self.__components)}"
 
     def __add__(self, other):
         """
@@ -135,9 +131,7 @@ Mathematical vectors
             return NotImplemented
         if self.dimensions != other.dimensions:
             raise DimensionsError("Operand + required two vectors with the same dimensions")
-        result_components = [self.components[i] + other.components[i] 
-                            for i in range(self.dimensions)]
-        return Vector(*result_components)
+        return Vector(*[c1 + c2 for c1, c2 in zip(self.components, other.components)])
 
     def __sub__(self, other):
         """
@@ -163,11 +157,9 @@ Mathematical vectors
             return NotImplemented
         if self.dimensions != other.dimensions:
             raise DimensionsError("Operand + required two vectors with the same dimensions")
-        result_components = [self.components[i] - other.components[i]
-                            for i in range(self.dimensions)]
-        return Vector(*result_components)
+        return Vector(*[c1 - c2 for c1, c2 in zip(self.components, other.components)])
     
-    def __mul__(self, other):
+    def __mul__(self, other: int | float):
         """
         Scalar multiplication
 
@@ -178,7 +170,7 @@ Mathematical vectors
         ----------
         self: Vector
             The first vector
-        other: int or float
+        other: float
             The scalar
 
         Raises
@@ -188,11 +180,9 @@ Mathematical vectors
         """
         if not isinstance(other, (int, float)):
             raise TypeError("Vector multiplication using \"*\" is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
-        result_components = [self.components[i]*other 
-                            for i in range(self.dimensions)]
-        return Vector(*result_components)
+        return Vector(*[c*other for c in self.components])
 
-    def __truediv__(self, other):
+    def __truediv__(self, other: int | float):
         """
         Scalar true division
 
@@ -203,7 +193,7 @@ Mathematical vectors
         ----------
         self: Vector
             The first vector
-        other: int or float
+        other: float
             The scalar
 
         Raises
@@ -213,11 +203,9 @@ Mathematical vectors
         """
         if not isinstance(other, (int, float)):
             raise TypeError("Vector true division using \"*\" is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
-        result_components = [self.components[i]/other 
-                            for i in range(self.dimensions)]
-        return Vector(*result_components)
+        return Vector(*[c/other for c in self.components])
     
-    def __floordiv__(self, other):
+    def __floordiv__(self, other: int | float):
         """
         Scalar floor division
 
@@ -228,7 +216,7 @@ Mathematical vectors
         ----------
         self: Vector
             The first vector
-        other: int or float
+        other: float
             The scalar
 
         Raises
@@ -239,10 +227,8 @@ Mathematical vectors
         if not isinstance(other, (int, float)):
             
             raise TypeError("Vector true division using \"*\" is for scalar only, if you want vectors multiplication, use Vector.dot(v1, v2) or Vector.cross(v1, v2)")
-        result_components = [self.components[i]//other 
-                            for i in range(self.dimensions)]
-        return Vector(*result_components)
-    
+        return Vector(*[c//other for c in self.components])   
+
     def __eq__(self, other) -> bool:
         """
         Equal statement
@@ -334,7 +320,7 @@ Mathematical vectors
         Round function
 
         Work for round() built-in function
-        The same as rounded but is not a normal method
+        The same as rounded
         """
         return self.rounded(decimal_places)
 
@@ -374,8 +360,9 @@ Mathematical vectors
             raise TypeError("Dot product only accept two vectors as arguements")
         if v1.dimensions != v2.dimensions:
             raise DimensionsError("Dot product required 2 Vectors with the same dimensions")
-        return sum([v1.components[i]*v2.components[i] 
-                    for i in range(v1.dimensions)])
+        return sum(
+            c1*c2 for c1, c2 in zip(v1.components, v2.components)
+        )
 
     @staticmethod
     def get_angle(v1, v2, rad: bool=True) -> float:
@@ -447,9 +434,9 @@ Mathematical vectors
             raise TypeError("Cross product only accept two vectors as arguements")
         if v1.dimensions != 3 or v2.dimensions != 3:
             raise DimensionsError("Only supported dot product for 3-dimensional vectors")
-        a1, a2, a3 = v1.components
-        b1, b2, b3 = v2.components
-        return Vector(a2*b3 - a3*b2, a3*b1 - a1*b3, a1*b2 - a2*b1)
+        x1, y1, z1 = v1.components
+        x2, y2, z2 = v2.components
+        return Vector(y1*z2 - z1*y2, z1*x2 - x1*z2, x1*y2 - y1*x2)
 
     def resize(self, dimensions: int) -> None:
         """
