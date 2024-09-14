@@ -12,25 +12,25 @@ class Vector:
     """
 Mathematical vectors
 
-    Vector is a Mathematical object whose have both direction or magnitude, or in broader terms, anything that satisfied certain properties, this `Vector` class is the simpler one.
+    `Vector` is a Mathematical object whose have both direction or magnitude, or in broader terms, anything that satisfied certain properties, this `Vector` class is the simpler one.
     Supported operations: addition, subtraction, multiplication, true division, floor division 
         Those operations work the same way as it is in math, true division will return floats whereas floor division return integers
         IMPORTANT: For multiplication and divison, those are for scalar and the vector should be the first operand. If you want to multiply two vectors, use `Vector.dot()` and `Vector.cross()`, see more later on.
     Supported statements:
         Equality(==): True if the two vectors components are the same otherwise False
-        Non-Equality(!=): No more than negation of equality, True if the two vectors components are not the otherwise else False
+        Non-Equality(!=): True if the two vectors components are not the otherwise else False
         If the two sides are not the same type, it will return True or False depends on the nature of the statements. No inequalities supported
     Representation: 
         Formatted as `Vector(*components)`
     
     Attributes
     ----------
-    __components: List
+    __components: List[int | float]
         Vectors components. Not directly changable, if you want to change vectors components, see `set_components()` method
     
     Properties
     ----------
-    components(self) -> list
+    components(self) -> list[int | float]
         Get access to the vector components as a list
     dimensions(self) -> int
         Get the vector dimensions, or just the length of the list of components
@@ -91,6 +91,11 @@ Mathematical vectors
         Parameters 
         ----------
         *args: int | float
+
+        Raises
+        ------
+        TypeError
+            For invalid types
         """
         self.__components = Vector(*args).components
 
@@ -240,9 +245,7 @@ Mathematical vectors
         Parameters
         ----------
         self: Vector 
-            The first vector 
-        other: Vector
-            The second vector
+        other: Any
 
         Return 
         ------
@@ -262,9 +265,7 @@ Mathematical vectors
         Parameters
         ----------
         self: Vector 
-            The first vector 
-        other: Vector
-            The second vector
+        other: Any
 
         Return 
         ------
