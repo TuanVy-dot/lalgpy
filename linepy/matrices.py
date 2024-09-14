@@ -36,3 +36,36 @@ class Matrix:
             raise DimensionsError("Operand `+` required two matrices with the same dimensions")
         return Matrix(*[utilities.array_add(c1, c2) 
                         for c1, c2 in zip(self.components, other.components)])
+
+    def __sub__(self, other):
+        if not isinstance(other, Matrix):
+            return NotImplemented
+        if self.dimensions != other.dimensions:
+            raise DimensionsError("Operand `+` required two matrices with the same dimensions")
+        return Matrix(*[utilities.array_sub(c1, c2) 
+                        for c1, c2 in zip(self.components, other.components)])
+    
+    def __mul__(self, other):
+        if isinstance(other, (int, float)):
+            return Matrix(*[utilities.array_scalar_mul(c, other) for c in self.components])
+        if isinstance(other, Matrix):
+            Arows, Acols = self.dimensions
+            Brows, Bcols = other.dimensions
+            if Acols != Brows:
+                raise DimensionsError("Incompatible matrices for multiplication, expected matrix in the form m×n to b multiply by n×p")
+            result = [[0]*Bcols for _ in range(Arows)]
+            for j in range(Arows):
+                for i in range(Bcols):
+                    result[j][i] = sum([self.components[j][k]*other.components[k][i]
+                                        for k in range(Acols)])
+            return Matrix(*result)
+        if isinstance(other, Vector):
+            Arows, Acols = self.dimensions
+            if Acols != other.dimensions:
+                raise DimensionsError("Incompatible matrix-vector for multiplication, expected matrix in the form m×n to be multiply by n×1 vector")
+            result = [0]*Arows
+            for i in range(Arows):
+                for j in range(Acols):
+                    result[i] += self.components[i][j]*other.components[j]
+            return Vector(*result)
+        return NotImplemented
