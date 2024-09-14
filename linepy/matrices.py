@@ -203,7 +203,7 @@ class Matrix:
         if isinstance(other, Vector):
             Arows, Acols = self.dimensions
             if Acols != other.dimensions:
-                raise DimensionsError("Incompatible matrix-vector for multiplication, expected matrix in the form m×n to be multiply by n×1 vector")
+                raise DimensionsError("Incompatible matrix-vector for multiplication, expected matrix in the form m×n to be multiply by 1×n vector")
             result = [0]*Arows
             for i in range(Arows):
                 for j in range(Acols):
