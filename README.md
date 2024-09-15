@@ -1,10 +1,10 @@
-# LinePy
-LinePy is a Python package that support simple operation for **Linear Algebra**.
+# LinearPy
+LinearPy is a Python package that support simple operation for **Linear Algebra**.
 It provides several features such as `Vector()` and `Matrix()` class. 
 Additionally, it have a utilities module which provides `array_add()` and more. I made this package mainly for **practice** and not recommend for 
 important and technical uses. Here are some examples:
 ```py
-import linepy as lp
+import linearpy as lp
 v1 = lp.Vector(1,0)
 v2 = lp.Vector(0,1)
 print(v1, v2)
@@ -38,7 +38,7 @@ And much more features.
 For more documentation, I suggest looking at the source, it is well documented.
 ## Installation
 ```
-pip install linepy
+pip install linearpy
 ```
 This should install the package via the ***PYPI*** repository
 
