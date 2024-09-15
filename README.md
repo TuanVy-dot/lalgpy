@@ -38,7 +38,7 @@ And much more features.
 For more documentation, I suggest looking at the source, it is well documented.
 ## Installation
 ```
-pip install linearpy
+pip install lalgpy
 ```
 This should install the package via the ***PYPI*** repository.
 **Latest**: 1.0.0 release
