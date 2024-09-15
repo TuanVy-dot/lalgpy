@@ -1,10 +1,10 @@
-# LinearPy
-LinearPy is a Python package that support simple operation for **Linear Algebra**.
+# LAlgPy
+LAlgPy short for Python Linear Algebra is a lightweight Python package that support simple operation for **Linear Algebra**.
 It provides several features such as `Vector()` and `Matrix()` class. 
 Additionally, it have a utilities module which provides `array_add()` and more. I made this package mainly for **practice** and not recommend for 
 important and technical uses. Here are some examples:
 ```py
-import linearpy as lp
+import lalgpy as lp
 v1 = lp.Vector(1,0)
 v2 = lp.Vector(0,1)
 print(v1, v2)
@@ -40,6 +40,7 @@ For more documentation, I suggest looking at the source, it is well documented.
 ```
 pip install linearpy
 ```
-This should install the package via the ***PYPI*** repository
+This should install the package via the ***PYPI*** repository.
+**Latest**: 1.0.0 release
 
 This is not a completed version of the package, issues can arrive and the `Matrix` class is not all implemented.

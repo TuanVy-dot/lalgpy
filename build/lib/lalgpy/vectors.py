@@ -6,7 +6,6 @@ Mathematical object `Vector`
 import numpy as np
 from .exceptions import *
 from .utilities import *
-from linepy import utilities
 
 class Vector:
     """
